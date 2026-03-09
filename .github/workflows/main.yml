@@ -1,0 +1,22 @@
+name: Docker Image Downloader
+
+on:
+  workflow_dispatch: # 允许手动点击按钮触发
+
+jobs:
+  download:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pull Image
+        run: |
+          # 拉取 OpenClaw 镜像
+          docker pull openclaw/openclaw:latest
+          # 将镜像保存为 tar 文件
+          docker save openclaw/openclaw:latest -o openclaw_image.tar
+          
+      - name: Upload to Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: openclaw-tar-file
+          path: openclaw_image.tar
+          retention-days: 1 # 下载链接保留1天
